@@ -132,12 +132,42 @@ def only_choice(values):
     Input: Sudoku in dictionary form.
     Output: Resulting Sudoku in dictionary form after filling in only choices.
     """
-    # TODO: Implement only choice strategy here
-    
+    for u in all_units:
+        for d in '123456789':
+            possible_boxes = []
+            for b in u:
+                if d in values[b]:
+                    possible_boxes.append(b)
+            if len(possible_boxes) == 1:
+                values[possible_boxes[0]] = d
+
     return values
 
 def reduce_puzzle(values):
-    pass
+    stalled = False
+    
+    while not stalled:
+
+        # Check how many boxes have a determined value
+        solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
+
+        # Your code here: Use the Eliminate Strategy
+        values = eliminate(values)
+        
+        # Your code here: Use the Only Choice Strategy
+        values = only_choice(values)
+
+        # Check how many boxes have a determined value, to compare
+        solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
+        
+        # If no new values were added, stop the loop.
+        stalled = solved_values_before == solved_values_after
+        
+        # Sanity check, return False if there is a box with zero available values:
+        if len([box for box in values.keys() if len(values[box]) == 0]):
+            return False
+    
+    return values
 
 def search(values):
     pass
@@ -151,10 +181,20 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
+    values = grid_values(grid)
+    values = reduce_puzzle(values)
+    return values
 
 if __name__ == '__main__':
-    diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
-    display(solve(diag_sudoku_grid))
+
+    grid_1 = '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
+    display(solve(grid_1))
+
+    # grid_2 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
+    # display(solve(grid_2))
+    
+    # diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
+    # display(solve(diag_sudoku_grid))
 
     try:
         from visualize import visualize_assignments
