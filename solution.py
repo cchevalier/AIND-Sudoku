@@ -75,7 +75,16 @@ def grid_values(grid):
             Keys: The boxes, e.g., 'A1'
             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
     """
-    return dict(zip(boxes, grid))
+    all_digits = '123456789'
+
+    values = dict(zip(boxes, grid))
+    assert len(values) == 81
+
+    for b in boxes:
+        if values[b] == '.':
+            values[b] = all_digits
+    
+    return values
 
 
 def display(values):
@@ -90,11 +99,29 @@ def display(values):
         print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
                       for c in cols))
         if r in 'CF': print(line)
+    
     return
 
 
 def eliminate(values):
-    pass
+    """Eliminate values from peers of each box with a single value.
+
+    Go through all the boxes, and whenever there is a box with a single value,
+    eliminate this value from the set of values of all its peers.
+
+    Args:
+        values: Sudoku in dictionary form.
+    Returns:
+        Resulting Sudoku in dictionary form after eliminating values.
+    """    
+    for b in boxes:
+        if len(values[b]) == 1:
+            digit = values[b]
+            for p in peers[b]:
+                values[p] = values[p].replace(digit, '')
+    
+    return values
+
 
 def only_choice(values):
     pass
