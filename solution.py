@@ -27,9 +27,43 @@ def naked_twins(values):
     # Find all instances of naked twins
     # Eliminate the naked twins as possibilities for their peers
 
+
 def cross(A, B):
     "Cross product of elements in A and elements in B."
-    pass
+    return [s+t for s in A for t in B]
+
+
+# Setting and Encoding the board
+#
+# box  : Individual cell at the intersection of rows and columns
+# unit : A complete row, column, or 3x3 squares (27 in total)
+# peers: for a particular box , its peers will be all other boxes that belong to a common unit
+#        (namely, those that belong to the same row, column, or 3x3 square)
+
+rows = 'ABCDEFGHI'
+cols = '123456789'
+
+boxes = cross(rows, cols)
+
+row_units = [cross(r, cols) for r in rows]
+# Top most row: row_units[0] = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9']
+
+column_units = [cross(rows, c) for c in cols]
+# Left most column: column_units[0] = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1']
+
+square_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123', '456', '789')]
+# Top left square: square_units[0] = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3']
+
+all_units = row_units + column_units + square_units
+
+units = dict((b, [u for u in all_units if b in u]) for b in boxes)
+# units for a given box in a dictionary form
+# units['A1']
+
+peers = dict((b, set(sum(units[b],[])) - set([b])) for b in boxes)
+# peers for a given box in a dictionary form
+# peers['A1']
+
 
 def grid_values(grid):
     """
@@ -41,7 +75,8 @@ def grid_values(grid):
             Keys: The boxes, e.g., 'A1'
             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
     """
-    pass
+    return dict(zip(boxes, grid))
+
 
 def display(values):
     """
@@ -49,7 +84,14 @@ def display(values):
     Args:
         values(dict): The sudoku in dictionary form
     """
-    pass
+    width = 1+max(len(values[s]) for s in boxes)
+    line = '+'.join(['-'*(width*3)]*3)
+    for r in rows:
+        print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
+                      for c in cols))
+        if r in 'CF': print(line)
+    return
+
 
 def eliminate(values):
     pass
