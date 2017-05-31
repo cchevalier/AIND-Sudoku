@@ -25,8 +25,30 @@ def naked_twins(values):
         the values dictionary with the naked twins eliminated from peers.
     """
 
-    # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
+    c = 0
+    for u in all_units:
+        c += 1
+        
+        # local peers with 2 digits
+        p2 = [b for b in u if len(values[b]) == 2]
+        np2 = len(p2)
+
+        if np2 > 1:
+            
+            # Find all instances of naked twins
+            for i in range(0, np2 -1):
+                for j in range(i + 1, np2):
+                    if values[p2[i]] == values[p2[j]]:
+                        # print('\nUnit {0:2d}: {1} and {2} are naked twins with common value = {3}'.format(c, p2[i], p2[j], values[p2[i]]))
+
+                        # Eliminate the naked twins as possibilities for their peers
+                        for digit in values[p2[i]]:
+                            for p in u:
+                                if p != p2[i] and p != p2[j] and digit in values[p]:
+                                    # print('\tremoving {0} from {1}'.format(digit, p))
+                                    values[p] = values[p].replace(digit, '')
+
+    return values
 
 
 def cross(A, B):
@@ -59,6 +81,7 @@ all_units = row_units + column_units + square_units
 
 
 # Diagonal Sudoku
+#
 # A diagonal sudoku is like a regular sudoku, except that among the two main 
 # diagonals, the numbers 1 to 9 should all appear exactly once.
 diag_units = [['A1', 'B2', 'C3', 'D4', 'E5', 'F6', 'G7', 'H8', 'I9'], 
@@ -156,6 +179,7 @@ def only_choice(values):
 
 
 def reduce_puzzle(values):
+    
     stalled = False
     
     while not stalled:
