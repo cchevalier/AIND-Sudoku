@@ -15,6 +15,7 @@ def assign_value(values, box, value):
         assignments.append(values.copy())
     return values
 
+
 def naked_twins(values):
     """Eliminate values using the naked twins strategy.
     Args:
@@ -55,6 +56,16 @@ square_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123', 
 # Top left square: square_units[0] = ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3']
 
 all_units = row_units + column_units + square_units
+
+
+# Diagonal Sudoku
+# A diagonal sudoku is like a regular sudoku, except that among the two main 
+# diagonals, the numbers 1 to 9 should all appear exactly once.
+diag_units = [['A1', 'B2', 'C3', 'D4', 'E5', 'F6', 'G7', 'H8', 'I9'], 
+              ['A9', 'B8', 'C7', 'D6', 'E5', 'F4', 'G3', 'H2', 'I1']]
+
+all_units = row_units + column_units + square_units + diag_units
+
 
 units = dict((b, [u for u in all_units if b in u]) for b in boxes)
 # units for a given box in a dictionary form
@@ -219,17 +230,21 @@ if __name__ == '__main__':
     # grid_1 = '..3.2.6..9..3.5..1..18.64....81.29..7.......8..67.82....26.95..8..2.3..9..5.1.3..'
     # display(solve(grid_1))
 
-    grid_2 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
-    display(solve(grid_2))
+    # grid_2 = '4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......'
+    # display(solve(grid_2))
     
-    # diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
-    # display(solve(diag_sudoku_grid))
+    # hard_1 = '.....6....59.....82....8....45........3........6..3.54...325..6..................'
+    # display(solve(hard_1))
 
-    try:
-        from visualize import visualize_assignments
-        visualize_assignments(assignments)
+    diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
+    display(solve(diag_sudoku_grid))
 
-    except SystemExit:
-        pass
-    except:
-        print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
+
+    # try:
+    #     from visualize import visualize_assignments
+    #     visualize_assignments(assignments)
+
+    # except SystemExit:
+    #     pass
+    # except:
+    #     print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
