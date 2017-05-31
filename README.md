@@ -3,11 +3,27 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+
+A: 
+*Within each unit (row, column, ...) we first identify the naked twins. 
+This add a new constraint to the other boxes than the naked twins within
+the same unit: these boxes cannot contain any of the two digits found in the 
+naked twins. By eliminating these digits we reduce the search space within the
+considered unit.*
+
+*This technique can be used after the elimination and the only choice technique 
+in order to reduce the search space of the sudoku problem*
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+ 
+A: 
+*To solve the diagonal sudoku problem we add two units corresponding to the 
+two main diagonals (called `unit_diags` in solution.py). These new units are 
+then considered as any other unit (row, column, square). The change to the 
+original sudoku solver code is therefore minimun.*
+
+
 
 ### Install
 
